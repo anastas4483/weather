@@ -1,18 +1,21 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
+import Weather from "./components/Weather.vue";
+import SelectPlace from "./components/SelectPlace.vue";
 
 @Options({
   components: {
-    HelloWorld,
+    Weather,
+    SelectPlace,
   },
 })
 export default class App extends Vue {}
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <SelectPlace />
+  <Weather />
+  sdf
 </template>
 
 <style lang="scss">
