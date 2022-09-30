@@ -1,11 +1,26 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-@Options({})
-export default class SelectCity extends Vue {}
+import { mapActions } from "pinia";
+import { useStore } from "@/store/root";
+@Options({
+  methods: {
+    ...mapActions(useStore, ["setCity"]),
+  },
+})
+export default class SelectCity extends Vue {
+  onChangeCity() {
+    console.log(345);
+  }
+}
 </script>
 <template>
   <div>
-    <input type="text" name="" placeholder="Select" id="" />
+    <v-autocomplete
+      :items="['Voronezh', 'Moscow', 'Saint-Petersburg']"
+      @change="onChangeCity"
+      label="Select a city"
+    >
+    </v-autocomplete>
   </div>
 </template>
 <style lang=""></style>

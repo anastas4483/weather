@@ -16,7 +16,7 @@ export default class WidgetWeather extends Vue {
   <div class="wrapper">
     <div class="weatherIcon">
       <img
-        :src="require('@/assets/cloudy.png')"
+        :src="require('@/assets/weather/cloudy.png')"
         title="icon depends on time, season, cloud,storm sun etc. Imagine scripts to
       definetly icons"
         width="200"
