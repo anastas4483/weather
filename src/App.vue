@@ -1,21 +1,17 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Weather from "./components/Weather.vue";
-import SelectPlace from "./components/SelectPlace.vue";
+import WeatherPage from "./pages/WeatherPage.vue";
 
 @Options({
   components: {
-    Weather,
-    SelectPlace,
+    WeatherPage,
   },
 })
 export default class App extends Vue {}
 </script>
 
 <template>
-  <SelectPlace />
-  <Weather />
-  sdf
+  <WeatherPage />
 </template>
 
 <style lang="scss">

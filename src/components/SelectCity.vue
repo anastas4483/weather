@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 @Options({})
-export default class SearchPlace extends Vue {}
+export default class SelectCity extends Vue {}
 </script>
 <template>
   <div>
