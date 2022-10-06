@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const useStore = defineStore("main", {
   state: () => ({
-    city: "",
+    city: "dfghjmnbvc",
   }),
   actions: {
     setCity(newCity: string) {
