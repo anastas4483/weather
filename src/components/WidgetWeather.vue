@@ -1,15 +1,22 @@
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, ref, computed } from "vue";
+import { useStore } from "vuex";
 
-@Options({
+export default defineComponent({
   props: {
     msg: String,
   },
-  components: {},
-})
-export default class WidgetWeather extends Vue {
-  msg!: string;
-}
+
+  setup() {
+    const store = useStore();
+    const city = ref(store.state.city);
+
+    computed(city);
+    return {
+      city: computed(() => store.state.city),
+    };
+  },
+});
 </script>
 
 <template>
@@ -21,7 +28,7 @@ export default class WidgetWeather extends Vue {
       definetly icons"
         width="200"
       />
-      <span class="city">Voronezh</span>
+      <span class="city">{{ city }}</span>
     </div>
     <div class="info">
       <div class="temperatureValue">TEMPERATURE</div>

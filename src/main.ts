@@ -1,10 +1,7 @@
-import "vuetify/styles";
 import { createApp } from "vue";
 import App from "./App.vue";
-import { createVuetify } from "vuetify";
-import { createPinia } from "pinia";
+import { store } from "@/store/root";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
-const vuetify = createVuetify();
-const pinia = createPinia();
-
-createApp(App).use(vuetify).use(pinia).mount("#app");
+createApp(App).use(ElementPlus).use(store).mount("#app");

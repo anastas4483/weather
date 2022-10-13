@@ -1,13 +1,12 @@
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 import WeatherPage from "./pages/WeatherPage.vue";
 
-@Options({
+export default defineComponent({
   components: {
     WeatherPage,
   },
-})
-export default class App extends Vue {}
+});
 </script>
 
 <template>
