@@ -1,19 +1,22 @@
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
+import Compass from "../assets/Compass.vue";
 
 export default defineComponent({
   props: {
     msg: String,
   },
+  components: {
+    Compass,
+  },
 
   setup() {
     const store = useStore();
-    const city = ref(store.state.city);
-
-    computed(city);
+    onMounted(() => store.dispatch("getWeather"));
     return {
       city: computed(() => store.state.city),
+      weather: computed(() => store.state.weather),
     };
   },
 });
@@ -31,11 +34,21 @@ export default defineComponent({
       <span class="city">{{ city }}</span>
     </div>
     <div class="info">
-      <div class="temperatureValue">TEMPERATURE</div>
+      <div class="temperatureValue">{{ weather.temperature }} C</div>
       <div class="detail">
-        <span class="windSpeed"> icon speed </span>
-        <span class="windDirection"> icon direction </span>
-        <span class="humidity"> icon humidity </span>
+        <span class="property windSpeed">
+          <img
+            :src="require('@/assets/wind.png')"
+            title="Wind speed, km/h"
+            width="30"
+          />
+          {{ weather.windSpeed }}
+        </span>
+        <span class="property windDirection">
+          <Compass :width="25" :height="25" />
+          {{ weather.windDirection }}
+        </span>
+        <span class="property humidity"> icon humidity </span>
       </div>
     </div>
   </div>
@@ -69,5 +82,13 @@ export default defineComponent({
 .detail {
   display: flex;
   flex-direction: column;
+
+  .property {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: 7px;
+  }
 }
 </style>
