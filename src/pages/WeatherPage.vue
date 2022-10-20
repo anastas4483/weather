@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import SelectCity from "@/components/SelectCity.vue";
 import WidgetWeather from "@/components/WidgetWeather.vue";
 import { useStore } from "vuex";
@@ -10,11 +10,6 @@ export default defineComponent({
     WidgetWeather,
     SelectCity,
   },
-
-  setup() {
-    const store = useStore<State>();
-    onMounted(() => store.dispatch("getWeather"));
-  },
 });
 </script>
 
@@ -22,7 +17,6 @@ export default defineComponent({
   <div class="mainWrapper">
     <SelectCity />
     <WidgetWeather />
-    <button>Get the weather</button>
   </div>
 </template>
 

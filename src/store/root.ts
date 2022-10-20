@@ -6,6 +6,7 @@ export interface City {
   longitude: number;
 }
 export interface State {
+  isLoading: boolean;
   city: City | null;
   cities: City[];
   weather: {
@@ -29,6 +30,7 @@ interface WeatherFromDto {
 
 export const store = createStore<State>({
   state: {
+    isLoading: false,
     city: null,
     cities: [
       {
@@ -61,9 +63,12 @@ export const store = createStore<State>({
     setWeather(state, payload) {
       state.weather = payload;
     },
+    setIsLoading(state, payload) {
+      state.isLoading = payload;
+    },
   },
   actions: {
-    async getWeather({ commit }) {
+    async getWeather({ state, commit }) {
       const getActualHumidity = ({
         time,
         relativehumidity_2m: humidity,
@@ -95,21 +100,23 @@ export const store = createStore<State>({
         )
           return "East";
       };
-      fetch(
-        "https://api.open-meteo.com/v1/forecast?latitude=51.6720400&longitude=39.1843000&current_weather=true&hourly=relativehumidity_2m"
-      )
-        .then((response) => response.json())
-        .then((response: WeatherFromDto) =>
-          commit("setWeather", {
-            temperature: response.current_weather.temperature,
-            windSpeed: response.current_weather.windspeed,
-            windDirection: interpretateWindDirection(
-              response.current_weather.winddirection
-            ),
-            humidity: getActualHumidity(response.hourly),
-          })
+      state.city &&
+        fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${state.city.latitude}&longitude=${state.city.longitude}&current_weather=true&hourly=relativehumidity_2m`
         )
-        .catch((err) => console.error(err));
+          .then((response) => response.json())
+          .then((response: WeatherFromDto) => {
+            commit("setIsLoading", false);
+            commit("setWeather", {
+              temperature: response.current_weather.temperature,
+              windSpeed: response.current_weather.windspeed,
+              windDirection: interpretateWindDirection(
+                response.current_weather.winddirection
+              ),
+              humidity: getActualHumidity(response.hourly),
+            });
+          })
+          .catch((err) => console.error(err));
     },
   },
 });

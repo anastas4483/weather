@@ -17,13 +17,14 @@ export default defineComponent({
     return {
       city: computed(() => store.state.city),
       weather: computed(() => store.state.weather),
+      isLoading: computed(() => store.state.isLoading),
     };
   },
 });
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-loading="isLoading">
     <div class="weatherIcon">
       <img
         :src="require('@/assets/weather/cloudy.png')"
@@ -33,7 +34,7 @@ export default defineComponent({
       />
       <span class="city"> &nbsp;{{ city?.name }}</span>
     </div>
-    <div class="info">
+    <div class="info" v-if="city">
       <div class="temperatureValue">
         <span class="value">{{ weather.temperature }}</span
         >°C
@@ -61,6 +62,9 @@ export default defineComponent({
         </span>
       </div>
     </div>
+    <div v-else class="placeholder">
+      To see the weather info select a city and click the button bellow
+    </div>
   </div>
 </template>
 
@@ -77,11 +81,21 @@ export default defineComponent({
   align-items: center;
   gap: 50px;
 
+  * {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", Arial, sans-serif;
+    color: #e9e9e9;
+  }
+
   .weatherIcon {
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
+  }
+
+  .placeholder {
+    width: 19.5%;
   }
 
   .info {
@@ -103,7 +117,6 @@ export default defineComponent({
       .property {
         display: flex;
         flex-direction: row;
-        justify-content: center;
         align-items: center;
         gap: 7px;
       }

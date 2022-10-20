@@ -8,7 +8,11 @@ export default defineComponent({
     const store = useStore<State>();
     const { cities } = store.state;
     const city = ref<City | null>(null);
-    watch(city, (value) => store.commit("setCity", value));
+    watch(city, (value) => {
+      store.commit("setIsLoading", true);
+      store.commit("setCity", value);
+      store.dispatch("getWeather", city);
+    });
 
     return {
       city,
