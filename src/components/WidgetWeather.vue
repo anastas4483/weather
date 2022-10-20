@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from "vue";
+import { State } from "@/store/root";
+import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 import Compass from "../assets/Compass.vue";
 
@@ -12,8 +13,7 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore();
-    onMounted(() => store.dispatch("getWeather"));
+    const store = useStore<State>();
     return {
       city: computed(() => store.state.city),
       weather: computed(() => store.state.weather),
@@ -31,10 +31,13 @@ export default defineComponent({
       definetly icons"
         width="200"
       />
-      <span class="city">{{ city }}</span>
+      <span class="city"> &nbsp;{{ city?.name }}</span>
     </div>
     <div class="info">
-      <div class="temperatureValue">{{ weather.temperature }} C</div>
+      <div class="temperatureValue">
+        <span class="value">{{ weather.temperature }}</span
+        >°C
+      </div>
       <div class="detail">
         <span class="property windSpeed">
           <img
@@ -48,7 +51,14 @@ export default defineComponent({
           <Compass :width="25" :height="25" />
           {{ weather.windDirection }}
         </span>
-        <span class="property humidity"> icon humidity </span>
+        <span class="property humidity">
+          <img
+            :src="require('@/assets/humidity.png')"
+            title="Humidity, %"
+            width="30"
+          />
+          {{ weather.humidity }} %
+        </span>
       </div>
     </div>
   </div>
@@ -66,29 +76,38 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   gap: 50px;
-}
 
-.info {
-  display: flex;
-  flex-direction: column;
-}
-
-.weatherIcon {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.detail {
-  display: flex;
-  flex-direction: column;
-
-  .property {
+  .weatherIcon {
     display: flex;
-    flex-direction: row;
-    justify-content: left;
+    flex-direction: column;
+    justify-content: start;
     align-items: center;
-    gap: 7px;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    .temperatureValue {
+      .value {
+        font-size: 60px;
+      }
+    }
+
+    .detail {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+
+      .property {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 7px;
+      }
+    }
   }
 }
 </style>

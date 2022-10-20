@@ -1,7 +1,9 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import SelectCity from "@/components/SelectCity.vue";
 import WidgetWeather from "@/components/WidgetWeather.vue";
+import { useStore } from "vuex";
+import { State } from "@/store/root";
 
 export default defineComponent({
   components: {
@@ -10,22 +12,17 @@ export default defineComponent({
   },
 
   setup() {
-    const onClickText = () => {
-      console.log("sssss");
-    };
-
-    return {
-      onClickText,
-    };
+    const store = useStore<State>();
+    onMounted(() => store.dispatch("getWeather"));
   },
 });
 </script>
 
-<template lang="">
+<template>
   <div class="mainWrapper">
     <SelectCity />
     <WidgetWeather />
-    <button @click="onClickText">{{ city }}</button>
+    <button>Get the weather</button>
   </div>
 </template>
 
@@ -35,5 +32,6 @@ export default defineComponent({
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 15px;
 }
 </style>
