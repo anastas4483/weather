@@ -22,10 +22,6 @@ export default defineComponent({
 
 <style lang="scss">
 .mainWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
+  height: 100%;
 }
 </style>

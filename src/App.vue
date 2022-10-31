@@ -13,4 +13,14 @@ export default defineComponent({
   <WeatherPage />
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+#app {
+  height: 100vh;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+</style>

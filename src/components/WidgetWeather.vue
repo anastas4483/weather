@@ -1,23 +1,29 @@
 <script lang="ts">
 import { State } from "@/store/root";
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
-import Compass from "../assets/Compass.vue";
+import Properties from "./Properties.vue";
+import Menu from "../assets/Menu.vue";
 
 export default defineComponent({
   props: {
     msg: String,
   },
   components: {
-    Compass,
+    Properties,
+    Menu,
   },
 
   setup() {
     const store = useStore<State>();
+    const isOpen = ref(true);
+    const onClickMenu = () => (isOpen.value = !isOpen.value);
     return {
+      isOpen,
       city: computed(() => store.state.city),
       weather: computed(() => store.state.weather),
       isLoading: computed(() => store.state.isLoading),
+      onClickMenu,
     };
   },
 });
@@ -25,45 +31,14 @@ export default defineComponent({
 
 <template>
   <div class="wrapper" v-loading="isLoading">
-    <div class="weatherIcon">
-      <img
-        :src="require('@/assets/weather/cloudy.png')"
-        title="icon depends on time, season, cloud,storm sun etc. Imagine scripts to
-      definetly icons"
-        width="200"
-      />
-      <span class="city"> &nbsp;{{ city?.name }}</span>
-    </div>
-    <div class="info" v-if="city">
-      <div class="temperatureValue">
-        <span class="value">{{ weather.temperature }}</span
-        >°C
+    <div class="properties">
+      <div class="menuWrapper">
+        <Menu :width="40" class="menu" @click="onClickMenu" />
       </div>
-      <div class="detail">
-        <span class="property windSpeed">
-          <img
-            :src="require('@/assets/wind.png')"
-            title="Wind speed, km/h"
-            width="30"
-          />
-          {{ weather.windSpeed }}
-        </span>
-        <span class="property windDirection">
-          <Compass :width="25" :height="25" />
-          {{ weather.windDirection }}
-        </span>
-        <span class="property humidity">
-          <img
-            :src="require('@/assets/humidity.png')"
-            title="Humidity, %"
-            width="30"
-          />
-          {{ weather.humidity }} %
-        </span>
+      <Properties :weather="weather" v-if="city" :isOpen="isOpen" />
+      <div v-else class="placeholder">
+        To see the weather info select a city and click the button bellow
       </div>
-    </div>
-    <div v-else class="placeholder">
-      To see the weather info select a city and click the button bellow
     </div>
   </div>
 </template>
@@ -71,54 +46,23 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: row;
+  height: 100%;
   background-color: cornflowerblue;
-  border-radius: 7px;
-  min-height: 400px;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
+  background-image: url(../assets/bg.jpg);
 
-  * {
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-      "Microsoft YaHei", Arial, sans-serif;
-    color: #e9e9e9;
-  }
+  .properties {
+    background-color: rgba(0, 0, 0, 0.359);
+    backdrop-filter: blur(4px);
+    height: 100%;
+    width: 300px;
+    padding: 30px;
 
-  .weatherIcon {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-  }
-
-  .placeholder {
-    width: 19.5%;
-  }
-
-  .info {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-
-    .temperatureValue {
-      .value {
-        font-size: 60px;
-      }
-    }
-
-    .detail {
+    .menuWrapper {
       display: flex;
-      flex-direction: column;
-      gap: 7px;
+      justify-content: flex-end;
 
-      .property {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 7px;
+      .menu {
+        cursor: pointer;
       }
     }
   }
