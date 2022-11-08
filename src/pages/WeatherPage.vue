@@ -1,9 +1,7 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 import SelectCity from "@/components/SelectCity.vue";
 import WidgetWeather from "@/components/WidgetWeather.vue";
-import { useStore } from "vuex";
-import { State } from "@/store/root";
 
 export default defineComponent({
   components: {
@@ -23,5 +21,6 @@ export default defineComponent({
 <style lang="scss">
 .mainWrapper {
   height: 100%;
+  background-image: url(../assets/bg.jpg);
 }
 </style>
