@@ -27,7 +27,6 @@ export default defineComponent({
       activeName,
       city: computed(() => store.state.city),
       weather: computed(() => store.state.weather),
-      isLoading: computed(() => store.state.isLoading),
       onClickMenu,
       handleClick,
     };
@@ -37,7 +36,7 @@ export default defineComponent({
 
 <template>
   <div class="wrapper">
-    <div class="properties" v-loading="isLoading" :class="{ expanded: isOpen }">
+    <div class="properties" :class="{ expanded: isOpen }">
       <div class="menuWrapper">
         <Menu :width="40" class="menu" @click="onClickMenu" />
       </div>

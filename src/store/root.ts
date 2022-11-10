@@ -1,12 +1,14 @@
 import { createStore, Store } from "vuex";
-
+import { unsplash } from "../utils/unsplash";
 export interface City {
   name: string;
   latitude: number;
   longitude: number;
+  imgSrc?: string;
 }
 export interface State {
-  isLoading: boolean;
+  isLoadingWeather: boolean;
+  isLoadingCityImg: boolean;
   city: City | null;
   cities: City[];
   weather: {
@@ -30,7 +32,8 @@ interface WeatherFromDto {
 
 export const store = createStore<State>({
   state: {
-    isLoading: false,
+    isLoadingWeather: false,
+    isLoadingCityImg: false,
     city: null,
     cities: [
       {
@@ -63,12 +66,15 @@ export const store = createStore<State>({
     setWeather(state, payload) {
       state.weather = payload;
     },
-    setIsLoading(state, payload) {
-      state.isLoading = payload;
+    setIsLoadingCityImg(state, payload) {
+      state.isLoadingCityImg = payload;
+    },
+    setIsLoadingWeather(state, payload) {
+      state.isLoadingWeather = payload;
     },
   },
   actions: {
-    async getWeather({ state, commit }) {
+    getWeather({ state, commit }) {
       const getActualHumidity = ({
         time,
         relativehumidity_2m: humidity,
@@ -89,7 +95,7 @@ export const store = createStore<State>({
         else if (windDirection >= 113 && windDirection < 160)
           return "North - West";
         else if (windDirection >= 160 && windDirection < 200) return "West";
-        else if (windDirection >= 203 && windDirection < 245)
+        else if (windDirection >= 200 && windDirection < 245)
           return "South - West";
         else if (windDirection >= 245 && windDirection < 295) return "South";
         else if (windDirection >= 295 && windDirection < 338)
@@ -106,7 +112,7 @@ export const store = createStore<State>({
         )
           .then((response) => response.json())
           .then((response: WeatherFromDto) => {
-            commit("setIsLoading", false);
+            commit("setIsLoadingWeather", false);
             commit("setWeather", {
               temperature: response.current_weather.temperature,
               windSpeed: response.current_weather.windspeed,
@@ -117,6 +123,28 @@ export const store = createStore<State>({
             });
           })
           .catch((err) => console.error(err));
+    },
+    getCityImg({ state, commit }) {
+      state.city &&
+        unsplash.photos
+          .getRandom({
+            query: state.city.name.toLocaleLowerCase(),
+            count: 1,
+            orientation: "landscape",
+          })
+          .then((result) => {
+            if (result.response) {
+              commit("setIsLoadingCityImg", false);
+              commit("setCity", {
+                ...state.city,
+                imgSrc: Array.isArray(result.response)
+                  ? result.response[0].urls.regular
+                  : result.response.urls.regular,
+              });
+            } else {
+              console.log("error occurred: ", result.errors[0]);
+            }
+          });
     },
   },
 });

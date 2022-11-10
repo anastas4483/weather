@@ -9,9 +9,11 @@ export default defineComponent({
     const { cities } = store.state;
     const city = ref<City | null>(null);
     watch(city, (value) => {
-      store.commit("setIsLoading", true);
+      store.commit("setIsLoadingWeather", true);
+      store.commit("setIsLoadingCityImg", true);
       store.commit("setCity", value);
-      store.dispatch("getWeather", city);
+      store.dispatch("getWeather");
+      store.dispatch("getCityImg");
     });
 
     return {
