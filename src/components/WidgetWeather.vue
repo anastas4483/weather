@@ -18,7 +18,7 @@ export default defineComponent({
   setup() {
     const store = useStore<State>();
     const isOpen = ref(true);
-    const activeName = ref("");
+    const activeName = ref("first");
     const onClickMenu = () => (isOpen.value = !isOpen.value);
     const handleClick = (tab: TabsPaneContext, event: Event) =>
       console.log(tab, event);
@@ -47,10 +47,10 @@ export default defineComponent({
         class="demo-tabs"
         @tab-click="handleClick"
       >
-        <el-tab-pane label="User" name="first">
+        <el-tab-pane label="Current" name="first">
           <Properties :weather="weather" :isOpen="isOpen" />
         </el-tab-pane>
-        <el-tab-pane label="Config" name="second">Config</el-tab-pane>
+        <el-tab-pane label="All day" name="second">Config</el-tab-pane>
       </el-tabs>
       <Properties v-if="city && !isOpen" :weather="weather" :isOpen="isOpen" />
       <div v-if="!city" class="placeholder">
@@ -66,15 +66,20 @@ export default defineComponent({
   height: 100%;
 
   .properties {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: rgba(0, 0, 0, 0.359);
     backdrop-filter: blur(4px);
     height: 100%;
-    padding: 30px;
+    padding-top: 30px;
     transition: all ease 0.5s;
     width: 100px;
 
     &.expanded {
       width: 250px !important;
+      align-items: stretch;
+      padding: 30px;
     }
 
     .menuWrapper {
@@ -84,6 +89,12 @@ export default defineComponent({
       .menu {
         cursor: pointer;
       }
+    }
+    .placeholder {
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      padding-top: 20px;
     }
   }
 }

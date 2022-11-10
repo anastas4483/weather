@@ -19,7 +19,7 @@ export default defineComponent({
     <div class="temperatureValue">
       <span class="value"> {{ weather.temperature }} </span>°C
     </div>
-    <div class="detail">
+    <div class="detail" :class="{ expanded: isOpen }">
       <span class="property windSpeed">
         <Wind :width="35" />
         <span v-if="isOpen">{{ weather.windSpeed }}</span>
@@ -64,8 +64,12 @@ export default defineComponent({
     flex-direction: column;
     font-size: 20px;
     gap: 30px;
-    align-items: flex-start;
+    align-items: center;
     transition: all ease 0.5s;
+
+    &.expanded {
+      align-items: flex-start;
+    }
 
     .property {
       display: flex;
